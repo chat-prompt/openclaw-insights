@@ -1,0 +1,19 @@
+{
+  "name": "openclaw-insights",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "fetch": "bash scripts/fetch-insights.sh",
+    "dev": "astro dev",
+    "build": "bash scripts/fetch-insights.sh && astro build",
+    "preview": "astro preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "astro": "^6.0.8"
+  }
+}

@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const insights = await getCollection('insights');
+  return insights.map((doc) => ({ params: { slug: doc.id.replace(/\.md$/, '') }, props: { doc } }));
+}
+
+const { doc } = Astro.props;
+const { Content } = await render(doc);
+---
+<BaseLayout title={doc.data.title}>
+  <div class="back-to-list"><a href="/">← 전체 목록</a></div>
+  <article>
+    <header class="article-header">
+      <span class="series-badge">🔍 인사이트</span>
+      <h1>{doc.data.title}</h1>
+      {doc.data.date && <div class="meta">{doc.data.date}</div>}
+    </header>
+    <div class="article-body"><Content /></div>
+  </article>
+</BaseLayout>
