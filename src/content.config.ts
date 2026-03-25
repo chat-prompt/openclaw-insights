@@ -7,6 +7,8 @@ const insights = defineCollection({
     title: z.string(),
     date: z.string().optional(),
     description: z.string().optional(),
+    category: z.string().optional(),
+    order: z.number().optional(),
   }),
 });
 
