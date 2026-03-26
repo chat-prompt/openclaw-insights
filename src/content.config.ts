@@ -12,4 +12,14 @@ const insights = defineCollection({
   }),
 });
 
-export const collections = { insights };
+const daily = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/daily' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    description: z.string().optional(),
+    messageCount: z.number().optional(),
+  }),
+});
+
+export const collections = { insights, daily };

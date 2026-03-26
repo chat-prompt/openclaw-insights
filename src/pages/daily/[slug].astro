@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const dailies = await getCollection('daily');
+  return dailies.map((doc) => ({ params: { slug: doc.id.replace(/\.md$/, '') }, props: { doc } }));
+}
+
+const { doc } = Astro.props;
+const { Content } = await render(doc);
+---
+<BaseLayout title={doc.data.title}>
+  <div class="back-to-list"><a href="/">← 전체 목록</a></div>
+  <article>
+    <header class="article-header">
+      <span class="series-badge">📅 일일 아카이브</span>
+      <h1>{doc.data.title}</h1>
+      <div class="meta">
+        {doc.data.date}
+        {doc.data.messageCount && <span> · {doc.data.messageCount}개 메시지</span>}
+      </div>
+      {doc.data.description && <p class="desc">{doc.data.description}</p>}
+    </header>
+    <div class="article-body"><Content /></div>
+  </article>
+</BaseLayout>
+
+<style>
+  .desc { margin-top: 12px; font-size: 16px; color: var(--text-secondary); line-height: 1.6; }
+</style>

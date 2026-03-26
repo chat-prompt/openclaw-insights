@@ -5,6 +5,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const insights = (await getCollection('insights')).sort((a, b) =>
   (a.data.order ?? 99) - (b.data.order ?? 99)
 );
+
+const dailies = (await getCollection('daily')).sort((a, b) =>
+  b.data.date.localeCompare(a.data.date)
+);
 ---
 <BaseLayout title="홈">
   <div class="home">
@@ -16,18 +20,41 @@ const insights = (await getCollection('insights')).sort((a, b) =>
       </p>
     </section>
 
-    <div class="list-grid">
-      {insights.map((doc, i) => (
-        <a href={`/insights/${doc.id.replace(/\.md$/, '')}`} class="list-card">
-          <div class="card-top">
-            <span class="card-num">#{i + 1}</span>
-            {doc.data.category && <span class="card-cat">{doc.data.category}</span>}
-          </div>
-          <h2 class="card-title">{doc.data.title}</h2>
-          {doc.data.description && <p class="card-desc">{doc.data.description}</p>}
-        </a>
-      ))}
-    </div>
+    {dailies.length > 0 && (
+      <section class="section">
+        <h2 class="section-title">📅 일일 아카이브</h2>
+        <p class="section-desc">매일 덕후방에서 무슨 대화가 오갔는지, 핫한 토픽은 뭐였는지</p>
+        <div class="list-grid">
+          {dailies.map((doc) => (
+            <a href={`/daily/${doc.id.replace(/\.md$/, '')}`} class="list-card daily-card">
+              <div class="card-top">
+                <span class="card-date">{doc.data.date}</span>
+                {doc.data.messageCount && <span class="card-count">{doc.data.messageCount}개 메시지</span>}
+              </div>
+              <h3 class="card-title">{doc.data.title}</h3>
+              {doc.data.description && <p class="card-desc">{doc.data.description}</p>}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="section">
+      <h2 class="section-title">📊 누적 인사이트</h2>
+      <p class="section-desc">일일 아카이브에서 추출한 패턴과 시그널 — 시간이 지나도 유효한 것들</p>
+      <div class="list-grid">
+        {insights.map((doc, i) => (
+          <a href={`/insights/${doc.id.replace(/\.md$/, '')}`} class="list-card">
+            <div class="card-top">
+              <span class="card-num">#{i + 1}</span>
+              {doc.data.category && <span class="card-cat">{doc.data.category}</span>}
+            </div>
+            <h2 class="card-title">{doc.data.title}</h2>
+            {doc.data.description && <p class="card-desc">{doc.data.description}</p>}
+          </a>
+        ))}
+      </div>
+    </section>
   </div>
 </BaseLayout>
 
@@ -37,12 +64,23 @@ const insights = (await getCollection('insights')).sort((a, b) =>
   .hero-emoji { font-size: 64px; margin-bottom: 16px; }
   .hero h1 { font-size: 36px; font-weight: 700; margin-bottom: 12px; }
   .hero-desc { font-size: 17px; color: var(--text-secondary); line-height: 1.7; }
+
+  .section { margin-top: 40px; }
+  .section-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .section-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 16px; }
+
   .list-grid { display: flex; flex-direction: column; gap: 12px; }
   .list-card { display: block; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
   .list-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(245, 158, 11, 0.1); }
+
+  .daily-card { border-left: 3px solid var(--accent); }
+
   .card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .card-num { font-size: 14px; font-weight: 700; color: var(--accent); }
   .card-cat { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--accent-bg); padding: 2px 10px; border-radius: 10px; }
+  .card-date { font-size: 14px; font-weight: 700; color: var(--accent); }
+  .card-count { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--accent-bg); padding: 2px 10px; border-radius: 10px; }
   .card-title { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  h3.card-title { font-size: 18px; }
   .card-desc { font-size: 15px; color: var(--text-secondary); margin-top: 6px; line-height: 1.5; }
 </style>
