@@ -12,8 +12,7 @@ cd "$TEMP"
 git sparse-checkout set src/content/insights 2>/dev/null
 cd -
 
-# 기존 insights 폴더 비우고 복사
-rm -rf "$DEST"/*
+# GitHub에서 가져온 파일만 덮어쓰기 (로컬 전용 파일 보존)
 cp "$TEMP/src/content/insights/"*.md "$DEST/" 2>/dev/null
 
 # 정리
