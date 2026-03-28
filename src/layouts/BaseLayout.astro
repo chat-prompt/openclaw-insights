@@ -36,6 +36,20 @@ const { title } = Astro.props;
   </div>
 
   <script is:inline>
+    // Auto-wrap tables in .article-body with scroll wrapper
+    (function() {
+      var tables = document.querySelectorAll('.article-body table');
+      tables.forEach(function(table) {
+        if (table.parentElement && table.parentElement.classList.contains('table-wrapper')) return;
+        var wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      });
+    })();
+  </script>
+
+  <script is:inline>
     // 테마 토글
     (function() {
       var btn = document.getElementById('theme-toggle');
@@ -151,8 +165,17 @@ const { title } = Astro.props;
   .article-body code { background: var(--bg-card); padding: 2px 6px; border-radius: 4px; font-size: 14px; }
   .article-body pre { background: #1A2332; color: #E4E9ED; padding: 16px; border-radius: 8px; overflow-x: auto; margin-bottom: 16px; }
   [data-theme="dark"] .article-body pre { background: #14161C; }
-  .article-body table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .article-body .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 16px; border: 1px solid var(--border-card); border-radius: 8px; }
+  .article-body table { width: 100%; border-collapse: collapse; margin-bottom: 0; min-width: 480px; }
+  .article-body .table-wrapper table { border: none; }
   .article-body th, .article-body td { padding: 10px 14px; border: 1px solid var(--border-card); text-align: left; font-size: 15px; }
   .article-body th { background: var(--bg-card); font-weight: 600; }
   .article-body strong { color: var(--text-primary); }
+
+  @media (max-width: 640px) {
+    .article-body { font-size: 16px; }
+    .article-body h2 { font-size: 20px; }
+    .article-body h3 { font-size: 17px; }
+    .article-body th, .article-body td { padding: 8px 10px; font-size: 13px; white-space: nowrap; }
+  }
 </style>

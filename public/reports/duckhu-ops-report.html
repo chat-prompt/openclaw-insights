@@ -102,6 +102,34 @@
   @media (max-width: 640px) {
     .summary-grid { grid-template-columns: repeat(2, 1fr); }
     .op-stats { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 16px 12px; }
+    .header { padding: 28px 16px; }
+    .header h1 { font-size: 22px; }
+    .op-card { padding: 16px; }
+    .chart-label { width: 55px; font-size: 11px; }
+    .chart-value { width: 45px; font-size: 11px; }
+    .stack-label { width: 55px; font-size: 11px; }
+    .stack-total { width: 45px; font-size: 11px; }
+    .ranking-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .ranking-table th, .ranking-table td { white-space: nowrap; padding: 8px 8px; font-size: 12px; }
+    .activity-heatmap { gap: 2px; }
+    .heat-cell { font-size: 7px; }
+    .heat-labels span { font-size: 7px; }
+    .legend { gap: 8px; }
+    .legend-item { font-size: 11px; }
+    .section-title { font-size: 17px; }
+    .comment p, .comment .quote { font-size: 13px; }
+  }
+
+  @media (max-width: 400px) {
+    .summary-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .summary-card .number { font-size: 24px; }
+    .op-stats { gap: 8px; }
+    .op-stat .val { font-size: 18px; }
+    .heat-cell { font-size: 6px; }
+    .heat-labels span { font-size: 6px; }
+    .activity-heatmap { gap: 1px; }
+    .chart-container { padding: 16px 12px; }
   }
 </style>
 </head>
