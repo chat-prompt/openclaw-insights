@@ -1,6 +1,13 @@
 ---
 interface Props { title: string; }
 const { title } = Astro.props;
+
+// 사이트 전체 마스터 토큰 (SHA-256 해시로 변환)
+const SITE_TOKEN = 'openclaw-duckhu-2026';
+const encoder = new TextEncoder();
+const data = encoder.encode(SITE_TOKEN);
+const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+const siteTokenHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 ---
 <!DOCTYPE html>
 <html lang="ko">
@@ -19,36 +26,141 @@ const { title } = Astro.props;
   </script>
 </head>
 <body>
-  <nav class="top-nav">
-    <a href="/" class="nav-home">🔍 덕후방 인사이트</a>
-    <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
-  </nav>
-  <main>
-    <slot />
-  </main>
-  <footer>
-    <p>GPTers 오픈클로 플랫폼팀</p>
-  </footer>
+  <!-- 사이트 전체 잠금 게이트 -->
+  <div id="site-gate" data-site-hash={siteTokenHash}>
+    <div class="site-gate-overlay">
+      <div class="site-gate-card">
+        <div class="site-gate-icon">🔒</div>
+        <h1>오픈클로 덕후방 인사이트</h1>
+        <p>비공개 사이트입니다.</p>
+        <p class="site-gate-hint">공유받은 링크로 접속하거나, 접근 코드를 입력해주세요.</p>
+        <form id="site-gate-form" class="site-gate-form">
+          <input type="text" id="site-gate-input" placeholder="접근 코드 입력" autocomplete="off" />
+          <button type="submit">입장</button>
+        </form>
+        <p id="site-gate-error" class="site-gate-error" style="display:none;">접근 코드가 맞지 않아요 😿</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 실제 사이트 콘텐츠 (잠금 해제 시 표시) -->
+  <div id="site-content" style="display:none;">
+    <nav class="top-nav">
+      <a href="/" class="nav-home">🔍 덕후방 인사이트</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>GPTers 오픈클로 플랫폼팀</p>
+    </footer>
+  </div>
 
   <script is:inline>
+    // 사이트 전체 잠금 로직
     (function() {
-      const btn = document.getElementById('theme-toggle');
-      function update() {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        btn.textContent = isDark ? '☀️' : '🌙';
+      var gate = document.getElementById('site-gate');
+      var content = document.getElementById('site-content');
+      var expectedHash = gate.dataset.siteHash;
+
+      function unlock() {
+        gate.style.display = 'none';
+        content.style.display = '';
       }
-      update();
-      btn.addEventListener('click', function() {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        if (isDark) {
-          document.documentElement.removeAttribute('data-theme');
-          localStorage.setItem('theme', 'light');
-        } else {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          localStorage.setItem('theme', 'dark');
+
+      async function hashToken(token) {
+        var encoder = new TextEncoder();
+        var data = encoder.encode(token);
+        var buf = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+      }
+
+      async function tryToken(token, save) {
+        var h = await hashToken(token);
+        if (h === expectedHash) {
+          if (save) localStorage.setItem('site-access-token', token);
+          unlock();
+          return true;
+        }
+        return false;
+      }
+
+      // 1) URL ?site_token= 파라미터
+      var params = new URLSearchParams(window.location.search);
+      var urlToken = params.get('site_token');
+      if (urlToken) {
+        tryToken(urlToken, true).then(function(ok) {
+          if (ok) {
+            // site_token만 제거, 다른 파라미터(token 등)는 유지
+            params.delete('site_token');
+            var remaining = params.toString();
+            var clean = window.location.pathname + (remaining ? '?' + remaining : '');
+            window.history.replaceState({}, '', clean);
+          } else {
+            initForm();
+          }
+        });
+        return;
+      }
+
+      // 2) localStorage 체크
+      var saved = localStorage.getItem('site-access-token');
+      if (saved) {
+        tryToken(saved, false).then(function(ok) {
+          if (!ok) {
+            localStorage.removeItem('site-access-token');
+            initForm();
+          }
+        });
+        return;
+      }
+
+      // 3) 수동 입력
+      initForm();
+
+      function initForm() {
+        var form = document.getElementById('site-gate-form');
+        var input = document.getElementById('site-gate-input');
+        var error = document.getElementById('site-gate-error');
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var val = input.value.trim();
+          tryToken(val, true).then(function(ok) {
+            if (!ok) {
+              error.style.display = '';
+              input.classList.add('shake');
+              setTimeout(function() { input.classList.remove('shake'); }, 500);
+            }
+          });
+        });
+      }
+    })();
+
+    // 테마 토글
+    (function() {
+      // site-content가 hidden일 수 있으므로 MutationObserver로 대기
+      function initTheme() {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        function update() {
+          var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          btn.textContent = isDark ? '☀️' : '🌙';
         }
         update();
-      });
+        btn.addEventListener('click', function() {
+          var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+          }
+          update();
+        });
+      }
+      initTheme();
     })();
   </script>
 </body>
@@ -145,4 +257,64 @@ const { title } = Astro.props;
   .article-body th, .article-body td { padding: 10px 14px; border: 1px solid var(--border-card); text-align: left; font-size: 15px; }
   .article-body th { background: var(--bg-card); font-weight: 600; }
   .article-body strong { color: var(--text-primary); }
+
+  /* 사이트 전체 잠금 게이트 */
+  .site-gate-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .site-gate-card {
+    text-align: center;
+    padding: 56px 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 20px;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+  }
+  .site-gate-icon { font-size: 56px; margin-bottom: 20px; }
+  .site-gate-card h1 { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+  .site-gate-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+  .site-gate-hint { margin-top: 4px; font-size: 13px; color: var(--text-muted); }
+  .site-gate-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 28px;
+    justify-content: center;
+  }
+  .site-gate-form input {
+    padding: 12px 18px;
+    border: 1px solid var(--border-card);
+    border-radius: 10px;
+    font-size: 15px;
+    background: var(--bg);
+    color: var(--text-primary);
+    width: 220px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .site-gate-form input:focus { border-color: var(--accent); }
+  .site-gate-form button {
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .site-gate-form button:hover { opacity: 0.9; }
+  .site-gate-error { color: #ef4444; font-size: 14px; margin-top: 14px; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+  }
+  .shake { animation: shake 0.4s; }
 </style>
