@@ -24,4 +24,16 @@ const daily = defineCollection({
   }),
 });
 
-export const collections = { insights, daily };
+const reports = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/reports' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    description: z.string().optional(),
+    htmlFile: z.string(),
+    order: z.number().optional(),
+    token: z.string().optional(),
+  }),
+});
+
+export const collections = { insights, daily, reports };

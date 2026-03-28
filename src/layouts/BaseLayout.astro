@@ -47,7 +47,10 @@ const siteTokenHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString
   <div id="site-content" style="display:none;">
     <nav class="top-nav">
       <a href="/" class="nav-home">🔍 덕후방 인사이트</a>
-      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
+      <div class="nav-links">
+        <a href="/#reports" class="nav-link">📋 보고서</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
+      </div>
     </nav>
     <main>
       <slot />
@@ -215,6 +218,9 @@ const siteTokenHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString
     z-index: 100;
   }
   .nav-home { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 17px; }
+  .nav-links { display: flex; align-items: center; gap: 12px; }
+  .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; }
+  .nav-link:hover { color: var(--accent); }
   .theme-toggle {
     background: none;
     border: 1px solid var(--border-card);
