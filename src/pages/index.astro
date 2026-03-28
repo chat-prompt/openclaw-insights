@@ -66,7 +66,7 @@ const reports = (await getCollection('reports')).sort((a, b) =>
         <p class="section-desc">데이터 기반 운영 현황 분석 — 대시보드형 심층 보고서</p>
         <div class="list-grid">
           {reports.map((doc, i) => (
-            <a href={`/reports/${doc.id.replace(/\.md$/, '')}`} class="list-card report-card">
+            <a href={`/reports/${doc.data.htmlFile}`} class="list-card report-card">
               <div class="card-top">
                 <span class="card-num">#{i + 1}</span>
                 <span class="card-date">{doc.data.date}</span>
