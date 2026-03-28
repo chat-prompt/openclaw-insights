@@ -8,40 +8,12 @@ export async function getStaticPaths() {
 }
 
 const { doc } = Astro.props;
-const hasToken = !!doc.data.token;
-const slug = doc.id.replace(/\.md$/, '');
 const iframeSrc = `/reports/${doc.data.htmlFile}`;
-
-let tokenHash = '';
-if (hasToken) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(doc.data.token);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  tokenHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
 ---
 <BaseLayout title={doc.data.title}>
   <div class="back-to-list"><a href="/#reports">← 전체 목록</a></div>
 
-  {hasToken && (
-    <div id="token-gate" data-token-hash={tokenHash} data-slug={slug}>
-      <div class="gate-overlay">
-        <div class="gate-card">
-          <div class="gate-icon">🔒</div>
-          <h2>보호된 보고서</h2>
-          <p>이 보고서는 접근 토큰이 필요해요.</p>
-          <p class="gate-hint">공유받은 링크로 접속하거나, 토큰을 입력해주세요.</p>
-          <form id="token-form" class="gate-form">
-            <input type="text" id="token-input" placeholder="토큰 입력" autocomplete="off" />
-            <button type="submit">확인</button>
-          </form>
-          <p id="token-error" class="gate-error" style="display:none;">토큰이 맞지 않아요 😿</p>
-        </div>
-      </div>
-    </div>
-  )}
-
-  <article id="article-content" style={hasToken ? 'display:none;' : ''}>
+  <article id="article-content">
     <header class="article-header">
       <span class="series-badge">📋 운영 보고서</span>
       <h1>{doc.data.title}</h1>
@@ -59,78 +31,6 @@ if (hasToken) {
     </div>
   </article>
 </BaseLayout>
-
-{hasToken && (
-  <script is:inline>
-    (function() {
-      const gate = document.getElementById('token-gate');
-      if (!gate) return;
-      const expectedHash = gate.dataset.tokenHash;
-      const slug = gate.dataset.slug;
-      const storageKey = 'report-token-' + slug;
-      const article = document.getElementById('article-content');
-
-      function unlock() {
-        gate.style.display = 'none';
-        article.style.display = '';
-      }
-
-      async function hashToken(token) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(token);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-      }
-
-      async function tryToken(token, save) {
-        const h = await hashToken(token);
-        if (h === expectedHash) {
-          if (save) localStorage.setItem(storageKey, token);
-          unlock();
-          return true;
-        }
-        return false;
-      }
-
-      var params = new URLSearchParams(window.location.search);
-      var urlToken = params.get('token');
-      if (urlToken) {
-        tryToken(urlToken, true).then(function(ok) {
-          if (ok) window.history.replaceState({}, '', window.location.pathname);
-          else initForm();
-        });
-        return;
-      }
-
-      var saved = localStorage.getItem(storageKey);
-      if (saved) {
-        tryToken(saved, false).then(function(ok) {
-          if (!ok) { localStorage.removeItem(storageKey); initForm(); }
-        });
-        return;
-      }
-
-      initForm();
-
-      function initForm() {
-        var form = document.getElementById('token-form');
-        var input = document.getElementById('token-input');
-        var error = document.getElementById('token-error');
-        form.addEventListener('submit', function(e) {
-          e.preventDefault();
-          var val = input.value.trim();
-          tryToken(val, true).then(function(ok) {
-            if (!ok) {
-              error.style.display = '';
-              input.classList.add('shake');
-              setTimeout(function() { input.classList.remove('shake'); }, 500);
-            }
-          });
-        });
-      }
-    })();
-  </script>
-)}
 
 <script is:inline>
   // iframe 높이 자동 조절
@@ -198,11 +98,11 @@ if (hasToken) {
     border: 1px solid var(--border-card);
     border-radius: 12px;
     overflow: hidden;
-    background: #fff;
+    background: #F5F3EE;
   }
 
   [data-theme="dark"] .report-iframe-wrapper {
-    background: #1a1a2e;
+    background: #1E2028;
   }
 
   #report-iframe {
@@ -211,62 +111,4 @@ if (hasToken) {
     min-height: 600px;
     border: none;
   }
-
-  .gate-overlay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
-  }
-  .gate-card {
-    text-align: center;
-    padding: 48px 40px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: 16px;
-    max-width: 400px;
-    width: 100%;
-  }
-  .gate-icon { font-size: 48px; margin-bottom: 16px; }
-  .gate-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-  .gate-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.5; }
-  .gate-hint { margin-top: 4px; font-size: 13px; color: var(--text-muted); }
-  .gate-form {
-    display: flex;
-    gap: 8px;
-    margin-top: 24px;
-    justify-content: center;
-  }
-  .gate-form input {
-    padding: 10px 16px;
-    border: 1px solid var(--border-card);
-    border-radius: 8px;
-    font-size: 15px;
-    background: var(--bg);
-    color: var(--text-primary);
-    width: 200px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .gate-form input:focus { border-color: var(--accent); }
-  .gate-form button {
-    padding: 10px 20px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-  .gate-form button:hover { opacity: 0.9; }
-  .gate-error { color: #ef4444; font-size: 14px; margin-top: 12px; }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-6px); }
-    40%, 80% { transform: translateX(6px); }
-  }
-  .shake { animation: shake 0.4s; }
 </style>

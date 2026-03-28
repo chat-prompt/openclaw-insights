@@ -6,98 +6,98 @@
 <title>🐱 OpenClaw 덕후방 운영진 활동현황 모니터링 보고서</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f0f0f; color: #e0e0e0; line-height: 1.7; }
+  body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; background: #F5F3EE; color: #1A2332; line-height: 1.7; }
   .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
   
-  .header { text-align: center; margin-bottom: 48px; padding: 40px 24px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 16px; border: 1px solid #2a2a4a; }
-  .header h1 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 8px; }
-  .header .subtitle { font-size: 15px; color: #8a8aaa; }
-  .header .period { display: inline-block; margin-top: 12px; padding: 6px 16px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 20px; font-size: 13px; color: #a5b4fc; }
+  .header { text-align: center; margin-bottom: 48px; padding: 40px 24px; background: linear-gradient(135deg, #FFFDF9 0%, #F5F0E8 50%, #EDE8DD 100%); border-radius: 16px; border: 1px solid #DDD8CE; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .header h1 { font-size: 28px; font-weight: 800; color: #1A2332; margin-bottom: 8px; }
+  .header .subtitle { font-size: 15px; color: #6B7A8F; }
+  .header .period { display: inline-block; margin-top: 12px; padding: 6px 16px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; font-size: 13px; color: #b45309; }
   
   .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
-  .summary-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 20px 16px; text-align: center; }
-  .summary-card .number { font-size: 32px; font-weight: 800; color: #fff; }
-  .summary-card .label { font-size: 12px; color: #8a8aaa; margin-top: 4px; }
-  .summary-card.highlight { border-color: rgba(99, 102, 241, 0.4); background: linear-gradient(135deg, #1a1a3e, #1a1a2e); }
-  .summary-card.highlight .number { color: #a5b4fc; }
+  .summary-card { background: #FFFDF9; border: 1px solid #DDD8CE; border-radius: 12px; padding: 20px 16px; text-align: center; }
+  .summary-card .number { font-size: 32px; font-weight: 800; color: #1A2332; }
+  .summary-card .label { font-size: 12px; color: #6B7A8F; margin-top: 4px; }
+  .summary-card.highlight { border-color: rgba(245, 158, 11, 0.4); background: linear-gradient(135deg, #FFFBF0, #FFFDF9); }
+  .summary-card.highlight .number { color: #b45309; }
   
   .section { margin-bottom: 40px; }
-  .section-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #2a2a4a; }
+  .section-title { font-size: 20px; font-weight: 700; color: #1A2332; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #DDD8CE; }
   
-  .chart-container { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 40px; }
+  .chart-container { background: #FFFDF9; border: 1px solid #DDD8CE; border-radius: 12px; padding: 24px; margin-bottom: 40px; }
   .chart-row { display: flex; align-items: center; margin-bottom: 8px; }
-  .chart-label { width: 70px; font-size: 12px; color: #8a8aaa; flex-shrink: 0; }
-  .chart-bar-wrapper { flex: 1; height: 24px; background: #0f0f1f; border-radius: 4px; overflow: hidden; }
+  .chart-label { width: 70px; font-size: 12px; color: #6B7A8F; flex-shrink: 0; }
+  .chart-bar-wrapper { flex: 1; height: 24px; background: #EDE8DD; border-radius: 4px; overflow: hidden; }
   .chart-bar { height: 100%; border-radius: 4px; }
-  .chart-bar.normal { background: linear-gradient(90deg, #4338ca, #6366f1); }
+  .chart-bar.normal { background: linear-gradient(90deg, #d97706, #f59e0b); }
   .chart-bar.peak { background: linear-gradient(90deg, #dc2626, #f87171); }
-  .chart-value { width: 55px; font-size: 12px; color: #a5b4fc; text-align: right; flex-shrink: 0; margin-left: 8px; }
+  .chart-value { width: 55px; font-size: 12px; color: #b45309; text-align: right; flex-shrink: 0; margin-left: 8px; }
 
   /* Stacked bar for operators */
   .stack-row { display: flex; align-items: center; margin-bottom: 6px; }
-  .stack-label { width: 70px; font-size: 12px; color: #8a8aaa; flex-shrink: 0; }
-  .stack-bar-wrapper { flex: 1; height: 20px; background: #0f0f1f; border-radius: 4px; overflow: hidden; display: flex; }
+  .stack-label { width: 70px; font-size: 12px; color: #6B7A8F; flex-shrink: 0; }
+  .stack-bar-wrapper { flex: 1; height: 20px; background: #EDE8DD; border-radius: 4px; overflow: hidden; display: flex; }
   .stack-seg { height: 100%; min-width: 1px; }
-  .seg-dahye { background: #f59e0b; }
-  .seg-tata { background: #8b5cf6; }
-  .seg-sofa { background: #06b6d4; }
-  .seg-jun { background: #22c55e; }
-  .seg-noonoji { background: #f97316; }
-  .seg-park { background: #ec4899; }
-  .seg-others { background: #374151; }
-  .stack-total { width: 55px; font-size: 12px; color: #8a8aaa; text-align: right; flex-shrink: 0; margin-left: 8px; }
+  .seg-dahye { background: #d97706; }
+  .seg-tata { background: #7c3aed; }
+  .seg-sofa { background: #0891b2; }
+  .seg-jun { background: #16a34a; }
+  .seg-noonoji { background: #ea580c; }
+  .seg-park { background: #db2777; }
+  .seg-others { background: #c4bdb0; }
+  .stack-total { width: 55px; font-size: 12px; color: #6B7A8F; text-align: right; flex-shrink: 0; margin-left: 8px; }
   
-  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding: 12px; background: #0f0f1f; border-radius: 8px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #c0c0d0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding: 12px; background: #F5F0E8; border-radius: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #4A5568; }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
 
-  .op-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: border-color 0.2s; }
-  .op-card:hover { border-color: #4338ca; }
+  .op-card { background: #FFFDF9; border: 1px solid #DDD8CE; border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: border-color 0.2s; }
+  .op-card:hover { border-color: #d97706; }
   .op-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-  .op-name { font-size: 18px; font-weight: 700; color: #fff; }
+  .op-name { font-size: 18px; font-weight: 700; color: #1A2332; }
   .op-role { font-size: 12px; padding: 3px 10px; border-radius: 12px; font-weight: 600; }
-  .role-lead { background: rgba(234, 179, 8, 0.15); color: #fbbf24; border: 1px solid rgba(234, 179, 8, 0.3); }
-  .role-core { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
-  .role-member { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+  .role-lead { background: rgba(217, 119, 6, 0.1); color: #b45309; border: 1px solid rgba(217, 119, 6, 0.3); }
+  .role-core { background: rgba(124, 58, 237, 0.08); color: #6d28d9; border: 1px solid rgba(124, 58, 237, 0.25); }
+  .role-member { background: rgba(22, 163, 74, 0.08); color: #15803d; border: 1px solid rgba(22, 163, 74, 0.25); }
   
   .op-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-  .op-stat { background: #0f0f1f; border-radius: 8px; padding: 12px; text-align: center; }
-  .op-stat .val { font-size: 22px; font-weight: 800; color: #fff; }
-  .op-stat .lbl { font-size: 11px; color: #6b6b8a; margin-top: 2px; }
+  .op-stat { background: #F5F0E8; border-radius: 8px; padding: 12px; text-align: center; }
+  .op-stat .val { font-size: 22px; font-weight: 800; color: #1A2332; }
+  .op-stat .lbl { font-size: 11px; color: #6B7A8F; margin-top: 2px; }
   
   .grade { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
-  .grade-s { background: rgba(234, 179, 8, 0.15); color: #fbbf24; }
-  .grade-a { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; }
-  .grade-b { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
-  .grade-c { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
-  .grade-d { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+  .grade-s { background: rgba(217, 119, 6, 0.1); color: #b45309; }
+  .grade-a { background: rgba(124, 58, 237, 0.08); color: #6d28d9; }
+  .grade-b { background: rgba(22, 163, 74, 0.08); color: #15803d; }
+  .grade-c { background: rgba(234, 88, 12, 0.08); color: #c2410c; }
+  .grade-d { background: rgba(220, 38, 38, 0.08); color: #dc2626; }
   
   .activity-heatmap { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-bottom: 16px; }
   .heat-cell { aspect-ratio: 1; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff; font-weight: 700; }
-  .heat-0 { background: #1a1a2e; color: #3a3a5a; }
-  .heat-1 { background: #1e3a5f; }
-  .heat-2 { background: #2563eb; }
-  .heat-3 { background: #7c3aed; }
+  .heat-0 { background: #EDE8DD; color: #b5ad9e; }
+  .heat-1 { background: #d4a94e; }
+  .heat-2 { background: #d97706; }
+  .heat-3 { background: #b45309; }
   .heat-4 { background: #dc2626; }
   .heat-labels { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-bottom: 4px; }
-  .heat-labels span { font-size: 9px; color: #6b6b8a; text-align: center; }
+  .heat-labels span { font-size: 9px; color: #6B7A8F; text-align: center; }
 
-  .comment { background: #0f0f1f; border-left: 3px solid #4338ca; border-radius: 0 8px 8px 0; padding: 16px; margin-top: 12px; }
-  .comment-title { font-size: 13px; font-weight: 700; color: #a5b4fc; margin-bottom: 6px; }
-  .comment p { font-size: 14px; color: #c0c0d0; margin-bottom: 8px; }
-  .comment .strength { color: #4ade80; }
-  .comment .improve { color: #fb923c; }
-  .comment .action { color: #60a5fa; }
-  .comment .quote { font-style: italic; color: #8a8aaa; border-left: 2px solid #3a3a5a; padding-left: 10px; margin: 8px 0; }
+  .comment { background: #F5F0E8; border-left: 3px solid #d97706; border-radius: 0 8px 8px 0; padding: 16px; margin-top: 12px; }
+  .comment-title { font-size: 13px; font-weight: 700; color: #b45309; margin-bottom: 6px; }
+  .comment p { font-size: 14px; color: #4A5568; margin-bottom: 8px; }
+  .comment .strength { color: #15803d; }
+  .comment .improve { color: #c2410c; }
+  .comment .action { color: #1d4ed8; }
+  .comment .quote { font-style: italic; color: #6B7A8F; border-left: 2px solid #DDD8CE; padding-left: 10px; margin: 8px 0; }
 
   .ranking-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .ranking-table th { text-align: left; padding: 10px 12px; color: #8a8aaa; font-weight: 600; border-bottom: 1px solid #2a2a4a; font-size: 12px; }
-  .ranking-table td { padding: 10px 12px; border-bottom: 1px solid #1a1a2e; }
-  .ranking-table tr:hover td { background: rgba(99, 102, 241, 0.05); }
-  .rank-bar { height: 6px; border-radius: 3px; background: #2a2a4a; position: relative; }
+  .ranking-table th { text-align: left; padding: 10px 12px; color: #6B7A8F; font-weight: 600; border-bottom: 1px solid #DDD8CE; font-size: 12px; }
+  .ranking-table td { padding: 10px 12px; border-bottom: 1px solid #EDE8DD; color: #4A5568; }
+  .ranking-table tr:hover td { background: rgba(245, 158, 11, 0.05); }
+  .rank-bar { height: 6px; border-radius: 3px; background: #DDD8CE; position: relative; }
   .rank-fill { height: 100%; border-radius: 3px; }
 
-  .footer { text-align: center; padding: 24px; color: #4a4a6a; font-size: 12px; margin-top: 40px; }
+  .footer { text-align: center; padding: 24px; color: #6B7A8F; font-size: 12px; margin-top: 40px; }
   
   @media (max-width: 640px) {
     .summary-grid { grid-template-columns: repeat(2, 1fr); }
@@ -266,15 +266,15 @@
         </div>
         <div class="stack-total">379</div>
       </div>
-      <div style="font-size:11px; color:#6b6b8a; margin-top:8px;">* 3/28은 오전 10시 기준 · 3/27은 AI토크 웨비나 진행일 (역대 최대 트래픽)</div>
+      <div style="font-size:11px; color:#6B7A8F; margin-top:8px;">* 3/28은 오전 10시 기준 · 3/27은 AI토크 웨비나 진행일 (역대 최대 트래픽)</div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div>다혜</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;"></div>타타</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#06b6d4;"></div>소파</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#22c55e;"></div>Jun</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#f97316;"></div>눈오지</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#ec4899;"></div>박정기</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#374151;"></div>일반 멤버</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d97706;"></div>다혜</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;"></div>타타</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#0891b2;"></div>소파</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a;"></div>Jun</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ea580c;"></div>눈오지</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#db2777;"></div>박정기</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#c4bdb0;"></div>일반 멤버</div>
       </div>
     </div>
   </div>
@@ -289,45 +289,45 @@
         </thead>
         <tbody>
           <tr>
-            <td style="color:#fbbf24; font-weight:800;">1</td>
-            <td style="color:#fff; font-weight:700;">다혜 (닿)</td>
-            <td style="color:#fff; font-weight:700;">916</td>
+            <td style="color:#b45309; font-weight:800;">1</td>
+            <td style="color:#1A2332; font-weight:700;">다혜 (닿)</td>
+            <td style="color:#1A2332; font-weight:700;">916</td>
             <td>12/12</td>
             <td>76.3</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:100%; background:#f59e0b;"></div></div></td>
             <td><span class="grade grade-s" style="margin:0;">S</span></td>
           </tr>
           <tr>
-            <td style="color:#c4b5fd; font-weight:800;">2</td>
-            <td style="color:#fff; font-weight:700;">타타</td>
-            <td style="color:#fff; font-weight:700;">204</td>
+            <td style="color:#6d28d9; font-weight:800;">2</td>
+            <td style="color:#1A2332; font-weight:700;">타타</td>
+            <td style="color:#1A2332; font-weight:700;">204</td>
             <td>8/12</td>
             <td>17.0</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:22.3%; background:#8b5cf6;"></div></div></td>
             <td><span class="grade grade-a" style="margin:0;">A</span></td>
           </tr>
           <tr>
-            <td style="color:#22d3ee; font-weight:800;">3</td>
-            <td style="color:#fff; font-weight:700;">소파</td>
-            <td style="color:#fff; font-weight:700;">168</td>
+            <td style="color:#0891b2; font-weight:800;">3</td>
+            <td style="color:#1A2332; font-weight:700;">소파</td>
+            <td style="color:#1A2332; font-weight:700;">168</td>
             <td>9/12</td>
             <td>14.0</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:18.3%; background:#06b6d4;"></div></div></td>
             <td><span class="grade grade-a" style="margin:0;">A</span></td>
           </tr>
           <tr>
-            <td style="color:#4ade80; font-weight:800;">4</td>
-            <td style="color:#fff; font-weight:700;">Jun</td>
-            <td style="color:#fff; font-weight:700;">61</td>
+            <td style="color:#16a34a; font-weight:800;">4</td>
+            <td style="color:#1A2332; font-weight:700;">Jun</td>
+            <td style="color:#1A2332; font-weight:700;">61</td>
             <td>7/12</td>
             <td>5.1</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:6.7%; background:#22c55e;"></div></div></td>
             <td><span class="grade grade-b" style="margin:0;">B</span></td>
           </tr>
           <tr>
-            <td style="color:#fb923c; font-weight:800;">5</td>
-            <td style="color:#fff; font-weight:700;">눈오지</td>
-            <td style="color:#fff; font-weight:700;">16</td>
+            <td style="color:#ea580c; font-weight:800;">5</td>
+            <td style="color:#1A2332; font-weight:700;">눈오지</td>
+            <td style="color:#1A2332; font-weight:700;">16</td>
             <td>6/12</td>
             <td>1.3</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:1.7%; background:#f97316;"></div></div></td>
@@ -335,8 +335,8 @@
           </tr>
           <tr>
             <td style="color:#f87171; font-weight:800;">6</td>
-            <td style="color:#fff; font-weight:700;">박정기</td>
-            <td style="color:#fff; font-weight:700;">3</td>
+            <td style="color:#1A2332; font-weight:700;">박정기</td>
+            <td style="color:#1A2332; font-weight:700;">3</td>
             <td>2/12</td>
             <td>0.3</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:0.3%; background:#ec4899;"></div></div></td>
@@ -582,21 +582,21 @@
     <div class="section-title">🔍 종합 평가 및 권고사항</div>
     <div class="op-card" style="border-color: rgba(234, 179, 8, 0.3);">
       
-      <h3 style="color:#fbbf24; margin-bottom:16px;">📊 핵심 발견</h3>
+      <h3 style="color:#b45309; margin-bottom:16px;">📊 핵심 발견</h3>
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
-        <div style="background:#0f0f1f; border-radius:8px; padding:16px;">
-          <div style="font-size:13px; color:#8a8aaa; margin-bottom:4px;">상위 3인 기여도</div>
-          <div style="font-size:28px; font-weight:800; color:#fbbf24;">94%</div>
-          <div style="font-size:12px; color:#6b6b8a;">다혜 916 + 타타 204 + 소파 168 = 1,288 / 1,368</div>
+        <div style="background:#F5F0E8; border-radius:8px; padding:16px;">
+          <div style="font-size:13px; color:#6B7A8F; margin-bottom:4px;">상위 3인 기여도</div>
+          <div style="font-size:28px; font-weight:800; color:#b45309;">94%</div>
+          <div style="font-size:12px; color:#6B7A8F;">다혜 916 + 타타 204 + 소파 168 = 1,288 / 1,368</div>
         </div>
-        <div style="background:#0f0f1f; border-radius:8px; padding:16px;">
-          <div style="font-size:13px; color:#8a8aaa; margin-bottom:4px;">하위 3인 기여도</div>
-          <div style="font-size:28px; font-weight:800; color:#f87171;">6%</div>
-          <div style="font-size:12px; color:#6b6b8a;">Jun 61 + 눈오지 16 + 박정기 3 = 80 / 1,368</div>
+        <div style="background:#F5F0E8; border-radius:8px; padding:16px;">
+          <div style="font-size:13px; color:#6B7A8F; margin-bottom:4px;">하위 3인 기여도</div>
+          <div style="font-size:28px; font-weight:800; color:#dc2626;">6%</div>
+          <div style="font-size:12px; color:#6B7A8F;">Jun 61 + 눈오지 16 + 박정기 3 = 80 / 1,368</div>
         </div>
       </div>
 
-      <h3 style="color:#60a5fa; margin-bottom:12px;">💡 권고사항</h3>
+      <h3 style="color:#1d4ed8; margin-bottom:12px;">💡 권고사항</h3>
       <ol style="padding-left:20px; font-size:14px; line-height:2;">
         <li><strong>역할 명시화</strong>: 각 운영진에게 구체적 역할을 배분. 예) 눈오지=환영·공지, Jun=기술Q&A, 타타=비개발자 가이드, 소파=심화 기술, 박정기=MCP·자동화 큐레이션</li>
         <li><strong>주간 최소 활동 기준</strong>: 운영진은 주 5건 이상 메시지 참여 (환영, 답변, 콘텐츠 공유 포함). 2주 연속 미달 시 역할 재논의</li>
