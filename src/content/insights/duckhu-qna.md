@@ -4,7 +4,6 @@ date: "2026-03-27"
 description: "오픈클로 덕후방(카카오톡)에서 나온 질문과 답변 정리 (3/17~3/27)"
 category: "qa"
 order: 1
-token: "duckhu-qa-2026"
 ---
 
 # 🐱 오픈클로 덕후방 Q&A 모음

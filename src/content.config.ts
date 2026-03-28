@@ -9,7 +9,6 @@ const insights = defineCollection({
     description: z.string().optional(),
     category: z.string().optional(),
     order: z.number().optional(),
-    token: z.string().optional(),
   }),
 });
 
@@ -20,7 +19,6 @@ const daily = defineCollection({
     date: z.string(),
     description: z.string().optional(),
     messageCount: z.number().optional(),
-    token: z.string().optional(),
   }),
 });
 
@@ -32,7 +30,6 @@ const reports = defineCollection({
     description: z.string().optional(),
     htmlFile: z.string(),
     order: z.number().optional(),
-    token: z.string().optional(),
   }),
 });
 

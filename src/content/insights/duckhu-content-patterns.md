@@ -4,7 +4,6 @@ date: "2026-03-28"
 description: "오픈클로 덕후방 14일치(3/14~3/28) 대화 3,999건에서 추출한 6가지 콘텐츠 패턴 분석"
 category: "insights"
 order: 2
-token: "duckhu-content-2026"
 ---
 
 # 덕후방 콘텐츠화 데이터 패턴 분석
